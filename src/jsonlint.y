@@ -1,7 +1,27 @@
+
+%{
+
+// MODIFICATION russa: added position meta-data to parsed objects
+var _isLoc = false;
+this.isLoc = function(){
+	return _isLoc;
+};
+/**
+ * @param {boolean} isEnabled
+ *        enable / disable extraction of position-information
+ * DEFAULT: disabled
+ */ 
+this.setLocEnabled = function(isEnabled){
+	_isLoc = isEnabled;
+};
+
+%}
+
 %start JSONText
 
 /*
   ECMA-262 5th Edition, 15.12.1 The JSON Grammar.
+  
 */
 
 
@@ -53,34 +73,54 @@ JSONValue
 
 JSONObject
     : '{' '}'
-        {{$$ = {};}}
+        {{$$ = {};
+          if(isLoc()) $$._loc = @1;//MOD:locInfo empty obj
+        }}
     | '{' JSONMemberList '}'
-        {$$ = $2;}
+        {$$ = $2;
+          if(isLoc()) $$._loc['_this'] = @2;//MOD:locInfo obj
+        }
     ;
 
 JSONMember
     : JSONString ':' JSONValue
-        {$$ = [$1, $3];}
+        {$$ = [$1, $3];
+          if(isLoc()) $$._loc = [@1, @3];//MOD:locInfo member&value
+        }
     ;
 
 JSONMemberList
     : JSONMember
-        {{$$ = {}; $$[$1[0]] = $1[1];}}
+        {{$$ = {}; $$[$1[0]] = $1[1];
+          if(isLoc()){
+            $$._loc = @1;//MOD:locInfo member
+            $$._loc[ '_' + $1[0] ] = $1._loc;//MOD:locInfo member
+          }
+        }}
     | JSONMemberList ',' JSONMember
-        {$$ = $1; $1[$3[0]] = $3[1];}
+        {$$ = $1; $1[$3[0]] = $3[1];
+          if(isLoc()) $$._loc[ '_' + $3[0] ] = $3._loc;//MOD:locInfo member-list
+        }
     ;
 
 JSONArray
     : '[' ']'
-        {$$ = [];}
+        {$$ = [];
+          if(isLoc()) $$._loc = [@1, @2];//MOD:locInfo empty array
+        }
     | '[' JSONElementList ']'
-        {$$ = $2;}
+        {$$ = $2;
+          if(isLoc()) $$._loc['_this'] = [@1, @3];//MOD:locInfo array
+        }
     ;
 
 JSONElementList
     : JSONValue
-        {$$ = [$1];}
+        {$$ = [$1];
+          if(isLoc()) $$._loc = {'_i0': @1};//MOD:locInfo array-entry
+        }
     | JSONElementList ',' JSONValue
-        {$$ = $1; $1.push($3);}
+        {$$ = $1; $1.push($3);
+         if(isLoc())  $$._loc[ '_i' +  ($$.length - 1) ] = @3;//MOD:locInfo array-list-entry
+        }
     ;
-
