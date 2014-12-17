@@ -1,6 +1,6 @@
 var fs = require("fs"),
     assert = require("assert"),
-    parser = require("../lib/jsonlint").parser;
+    parser = require("../lib/jsonlint-ext").parser;
 
 exports["test object"] = function () {
     var json = '{"foo": "bar"}';

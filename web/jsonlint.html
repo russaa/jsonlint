@@ -4,7 +4,7 @@
     <meta charset="utf-8" /> 
     <title>JSON Lint</title> 
     <script src="json2.js"></script>
-    <script src="jsonlint-loc.js"></script>
+    <script src="jsonlint-ext.js"></script>
     <script>
       window.onload = function () {
         jsonlint.setLocEnabled(true);//enable extraction of location meta data    	  
@@ -16,6 +16,13 @@
             }
             else {
             	jsonlint.setLocEnabled(false);//enable extraction of location meta data   
+            }
+            
+            if (document.getElementById("strict-mode").checked) {
+            	jsonlint.setStrict(true);//enable extraction of location meta data   
+            }
+            else {
+            	jsonlint.setStrict(false);//enable extraction of location meta data   
             }
         	
             var result = jsonlint.parse(document.getElementById("source").value);
@@ -62,7 +69,13 @@
     <input type="checkbox" value="yes" id="reformat" /><label for="reformat">reformat JSON</label>
     
     <em> 
-    <input type="checkbox" value="yes" id="extract-loc" /><label for="extract-loc">extract location information as meta data</label>
+    	<input type="checkbox" value="yes" id="strict-mode" />
+    	<label for="strict-mode" title="will cause errors for duplicate properties">use "strict" parsing mode</label>
+    </em>
+    
+    <em> 
+    	<input type="checkbox" value="yes" id="extract-loc" />
+    	<label for="extract-loc" title="attaches position data to parsed objects">extract location information as meta data</label>
     </em>
     
   </p>
