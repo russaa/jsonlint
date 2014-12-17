@@ -75,6 +75,7 @@ the result for example above would be:
 }
 ``` 
 
+##### loc for Properties
 Position information is stored in property `"_loc"`.
 Positions for properties are noted in the object's `"_loc"` in sub-property: `"_"+ property-name`
 e.g.:
@@ -84,7 +85,8 @@ e.g.:
     "_someProperty": {
             ...
 ```
-             
+
+##### loc for Array Entries
 Positions for array entries are noted in the array's `"_loc"` in sub-property: ´"_"+ entry-index`
 e.g.:
 ```javascript
@@ -94,7 +96,7 @@ e.g.:
     "_1": {
             ...
 ```
-
+##### loc for Arrays and Objects
 The object's / array's own position is noted in `"_loc"` in sub-property `"_this"`
 e.g.:
 ```javascript
@@ -103,6 +105,7 @@ e.g.:
     "_this": { ...
 ````
 
+##### The loc Properties
 Each position/location information object has properties:
 ```javascript
 { 
@@ -132,8 +135,8 @@ jsonlint.parse('{"duplicate": false, "duplicate": true}');
 ```
 
 If `setLocEnabled` is set to `true`, the error will contain additional location
-information:
- * `_loc`: position of the offending property
+information (see also [loc properties](#the-loc-properties) above):
+ * `_loc`: position of the offending property 
  * `_locTo`: position of the first declaration of the property
 
 Example for error with additional location information:
