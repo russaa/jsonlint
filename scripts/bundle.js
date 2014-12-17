@@ -4,6 +4,14 @@ var fs = require('fs');
 var modPrefix = '/**\n\
  * Modified JSON Lint parser (by russa)\n\
  * \n\
+ * Parser has a "strict" mode which will throw an Error in case duplicate properties are encountered, e.g.\n\
+ * 	e.g.: {\n\
+ *          "duplicate": false\n\
+ *          "duplicate": true\n\
+ * 	      }\n\
+ * will cause an Error in "strict" mode.\n\
+ * \n\
+ * \n\
  * Parser returns position information for parsed JSON objects, i.e.\n\
  * the location within the input-string that is parsed.\n\
  * \n\
@@ -44,11 +52,12 @@ var modPrefix = '/**\n\
 **/\n';
 
 //export enable/disable interface meta-data extraction
-var modPostfix = '\nexports.isLoc = isLoc;\nexports.setLocEnabled = setLocEnabled;\n';
+var modPostfix = '\nexports.isLoc = isLoc;\nexports.setLocEnabled = setLocEnabled;\n'
+	+ '\nexports.isStrict = isStrict;\nexports.setStrict = setStrict;\n';
 
 var source = modPrefix +
   "var jsonlint = (function(){var require=true,module=false;var exports={};" +
-  fs.readFileSync(__dirname+'/../lib/jsonlint.js', 'utf8') +
+  fs.readFileSync(__dirname+'/../lib/jsonlint-ext.js', 'utf8') +
   modPostfix +
   "return exports;})()";
 

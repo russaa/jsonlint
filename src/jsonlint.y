@@ -15,6 +15,20 @@ this.setLocEnabled = function(isEnabled){
 	_isLoc = isEnabled;
 };
 
+// MODIFICATION russa: add "strict" parsing mode (e.g. reject duplicate key entries)
+var _isStrict = false;
+this.isStrict = function(){
+	return _isStrict;
+};
+/**
+ * @param {boolean} isEnabled
+ *        enable / disable "strict" mode for parsing
+ * DEFAULT: disabled
+ */ 
+this.setStrict = function(isEnabled){
+	_isStrict = isEnabled;
+};
+
 %}
 
 %start JSONText
@@ -98,7 +112,30 @@ JSONMemberList
           }
         }}
     | JSONMemberList ',' JSONMember
-        {$$ = $1; $1[$3[0]] = $3[1];
+        {
+          $$ = $1;
+          
+          if(isStrict()){//MOD: "strict" mode: reject duplicate key entries
+		
+            if(typeof $1[$3[0]] !== 'undefined'){
+			
+              var pos = $3._loc? $3._loc[0] : @3;
+              
+              var errStr = 'Parse error in "strict" mode on line '+pos.first_line+': Duplicate property "'+$3[0]+'"';
+              
+              var err = new Error(errStr);
+              if($3._loc){
+              	err._loc = pos; 
+              }
+              if($1._loc){
+                err._locTo = $1._loc['_'+$3[0]][0];
+              }
+              throw err;
+            }
+	      }//END MOD: "strict" mode
+	      
+          $1[$3[0]] = $3[1];
+          
           if(isLoc()) $$._loc[ '_' + $3[0] ] = $3._loc;//MOD:locInfo member-list
         }
     ;
