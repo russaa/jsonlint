@@ -1,4 +1,4 @@
-JSON Lint (LOC INFO)
+JSON Lint (EXTENDED)
 =========
 
 A modified version of the JavaScript [JSON parser](https://github.com/zaach/jsonlint/) by Z. Carter.
@@ -7,8 +7,14 @@ A modified version of the JavaScript [JSON parser](https://github.com/zaach/json
 MODIFICATION (russa)
 ----
 
-Modified JSON parser which additionally extracts the position / location information
-for the parsed JSON object.
+Modified JSON parser with:
+ * additional location information (i.e. position of objects within parsed string)
+ * `strict` parsing mode which
+   * will throw an error if JSON object has duplicate keys
+   * _TODO: add features for strict parsing mode_ 
+
+
+### MOD: Location Information 
 
 Parser returns position information for parsed JSON objects, i.e.
 the location within the input-string that is parsed.
@@ -18,14 +24,14 @@ Enable extraction of position information:
 
 var jsonlint = require("jsonlint");
 
-//enable meta-data extraction:
+//enable meta-data extraction (i.e. the location information):
 jsonlint.setLocEnabled(true);
 
 var data = jsonlint.parse('{"creative?": false}');
 
 ```
 
-the result for parsed data object would be:
+the result for example above would be:
 ```javascript
 
 // Index (in 3 lines)
@@ -104,6 +110,41 @@ Each position/location information object has properties:
   "last_line"    : NUMBER 
   "first_column" : NUMBER
   "last_column"  : NUMBER
+}
+```
+
+### MOD: Strict parsing mode
+
+Enable `strict` parsing mode:
+```javascript
+
+var jsonlint = require("jsonlint");
+
+//enable meta-data extraction (i.e. the location information):
+jsonlint.setStrict(true);
+
+//OK
+var data = jsonlint.parse('{"creative?": false}');
+
+//ERROR
+jsonlint.parse('{"duplicate": false, "duplicate": true}');
+
+```
+
+If `setLocEnabled` is set to `true`, the error will contain additional location
+information:
+ * `_loc`: position of the offending property
+ * `_locTo`: position of the first declaration of the property
+
+Example for error with additional location information:
+```javascript
+...
+jsonlint.setLocEnabled(true);
+try{
+  jsonlint.parse('{\n  "duplicate": false,\n  "duplicate": true\n}');
+} catch (e){
+  console.log('duplicate property at line '+e._loc.first_line);
+  console.log('property was already defined at line '+e._locTo.first_line);
 }
 ```
 

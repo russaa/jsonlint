@@ -1,6 +1,6 @@
 {
-  "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
-  "name": "jsonlint",
+  "author": "russa",
+  "name": "jsonlint-ext",
   "description": "Validate JSON",
   "keywords": [
     "json",
@@ -12,10 +12,10 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/zaach/jsonlint.git"
+    "url": "git://github.com/russaa/jsonlint.git"
   },
   "bugs": {
-    "url": "http://github.com/zaach/jsonlint/issues"
+    "url": "https://github.com/russaa/jsonlint/issues"
   },
   "main": "lib/jsonlint.js",
   "bin": {
@@ -36,6 +36,5 @@
   "scripts": {
     "test": "node test/all-tests.js"
   },
-  "homepage": "http://zaach.github.com/jsonlint/",
   "optionalDependencies": {}
 }
