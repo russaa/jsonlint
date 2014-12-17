@@ -12,12 +12,12 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/russaa/jsonlint.git"
+    "url": "git://github.com/russaa/jsonlint-ext.git"
   },
   "bugs": {
-    "url": "https://github.com/russaa/jsonlint/issues"
+    "url": "https://github.com/russaa/jsonlint-ext/issues"
   },
-  "main": "lib/jsonlint.js",
+  "main": "lib/jsonlint-ext.js",
   "bin": {
     "jsonlint": "lib/cli.js"
   },
