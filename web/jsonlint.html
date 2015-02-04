@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="utf-8" /> 
-    <title>JSON Lint</title> 
+    <title>JSON Lint EXT</title> 
     <script src="json2.js"></script>
     <script src="jsonlint-ext.js"></script>
     <script>
@@ -59,8 +59,22 @@
     </style>
 </head> 
 <body> 
-  <h1>JSON Lint</h1> 
-  <p>A pure JavaScript version of the service provided at <a href="http://jsonlint.com/">jsonlint.com</a>.</p>
+  <h1>JSON Lint EXT</h1> 
+  <div>A <strong>slightly modified</strong> version of the service provided at <a href="http://jsonlint.com/">jsonlint.com</a> in pure JavaScript:
+  	<ul>
+  		<li>options (below) that are specific to the extended version are shown <em>in italics</em></li>
+  		<li>extended <u>strict</u> mode:<br/>
+  		    throws error in case of duplicate properties.</li>
+  		<li>extended <u>location information</u> mode:<br>
+  		    returns additional meta-information about the position of properties/values within the JSON string.
+  			<ul>
+  				<li>using this option in combination with <u>reformat JSON</u> will display the
+  				    <em>location information</em> in the input box.
+  				</li>
+  			</ul>
+  		</li>
+  	</ul>
+  </div>
   <textarea id="source" rows="20" cols="50">
 
   </textarea>
@@ -70,17 +84,18 @@
     
     <em> 
     	<input type="checkbox" value="yes" id="strict-mode" />
-    	<label for="strict-mode" title="will cause errors for duplicate properties">use "strict" parsing mode</label>
+    	<label for="strict-mode" title="will cause errors for duplicate properties">use <u>strict</u> parsing mode</label>
     </em>
     
     <em> 
     	<input type="checkbox" value="yes" id="extract-loc" />
-    	<label for="extract-loc" title="attaches position data to parsed objects">extract location information as meta data</label>
+    	<label for="extract-loc" title="attaches position data to parsed objects">extract <u>location information</u> as meta data</label>
     </em>
     
   </p>
   <h2>Results</h2>
   <pre id="result"></pre>
-  <p><a href="http://github.com/zaach/jsonlint">project on github</a></p> 
+  <p><a href="https://github.com/russaa/jsonlint-ext">project on github</a>
+  	<i><small>(based on <a href="https://github.com/zaach/jsonlint">jsonlint@github</a>)</small></i></p> 
 </body> 
 </html> 
