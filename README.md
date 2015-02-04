@@ -3,6 +3,9 @@ JSON Lint (EXTENDED)
 
 A modified version of the JavaScript [JSON parser](https://github.com/zaach/jsonlint/) by Z. Carter.
 
+Try a demo for the modified version [jsonlint-ext](https://russaa.github.io/jsonlint-ext/):
+the demo page offers a JSON verifier with extended options, e.g. `strict` mode (see details below).
+
 
 MODIFICATION (russa)
 ----
@@ -16,8 +19,21 @@ Modified JSON parser with:
 
 ### MOD: Location Information 
 
-Parser returns position information for parsed JSON objects, i.e.
-the location within the input-string that is parsed.
+The parser returns position information for parsed JSON objects, i.e.
+the location for JSON properties and values within the input-string that is parsed.
+
+
+_Location information_ - i.e. the position, where a data-property is located 
+within the String - may be useful, if you code a JSON editor and want to
+annotate data-properties; and then show/indicate which properties have annotations 
+in your editor.
+Another example would be, if you want to define a data format that puts 
+additional constraints on the JSON data.
+Then you could write a verifier which uses the _location information_ in case
+one of these additional restrictions was not satisfied in order to show,
+where exactly in the data the "misbehavior" occurred.
+
+
 
 Enable extraction of position information:
 ```javascript
