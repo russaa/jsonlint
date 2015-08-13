@@ -1,89 +1,27 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-    <meta charset="utf-8" /> 
-    <title>JSON Lint EXT</title> 
-    <script src="json2.js"></script>
-    <script src="jsonlint-ext.js"></script>
-    <script>
-      window.onload = function () {
-        jsonlint.setLocEnabled(true);//enable extraction of location meta data    	  
-        document.getElementById("button").onclick = function () {
-          try {
-            
-            if (document.getElementById("extract-loc").checked) {
-            	jsonlint.setLocEnabled(true);//enable extraction of location meta data   
-            }
-            else {
-            	jsonlint.setLocEnabled(false);//enable extraction of location meta data   
-            }
-            
-            if (document.getElementById("strict-mode").checked) {
-            	jsonlint.setStrict(true);//enable extraction of location meta data   
-            }
-            else {
-            	jsonlint.setStrict(false);//enable extraction of location meta data   
-            }
-        	
-            var result = jsonlint.parse(document.getElementById("source").value);
-            if (result) {
-              document.getElementById("result").innerHTML = "JSON is valid!";
-              document.getElementById("result").className = "pass";
-              if (document.getElementById("reformat").checked) {
-                document.getElementById("source").value = JSON.stringify(result, null, "  ");
-              }
-            }
-          } catch(e) {
-            document.getElementById("result").innerHTML = e;
-            document.getElementById("result").className = "fail";
-          }
-        };
-      }
-    </script>
-    <style>
-      body {font-family: sans-serif;}
-      #result {
-        padding: 1em;
-      }
-      .pass {
-        background-color: #efe;
-        color: #393;
-        border: 2px solid #393;
-      }
-      .fail {
-        background-color: #fee;
-        color: #933;
-        border: 2px solid #933;
-      }
-      textarea { width: 100%; }
-    </style>
-</head> 
-<body> 
-  <h1>JSON Lint EXT</h1> 
-  <div>A <strong>slightly modified</strong> version of the service provided at <a href="http://jsonlint.com/">jsonlint.com</a> in pure JavaScript:
-  	<ul>
-  		<li>options (below) that are specific to the extended version are shown <em>in italics</em></li>
-  		<li>extended <u>strict</u> mode:<br/>
-  		    throws error in case of duplicate properties.</li>
-  		<li>extended <u>location information</u> mode:<br>
-  		    returns additional meta-information about the position of properties/values within the JSON string.
-  			<ul>
-  				<li>using this option in combination with <u>reformat JSON</u> will display the
-  				    <em>location information</em> in the input box.
-  				</li>
-  			</ul>
-  		</li>
-  	</ul>
-  </div>
-  <textarea id="source" rows="20" cols="50">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
-  </textarea>
-  <p>
+	<title>JSON Lint EXT</title>
+
+    <link rel="stylesheet" href="json-editor/css/built-editor.css" />
+    <link rel="stylesheet" href="json-editor/css/app.css" />
+    
+	<script type="text/javascript" src="json-editor/libs/require.js"></script>
+	<script type="text/javascript" src="json-editor/config.js"></script>
+	
+</head>
+
+<body>
+
+  <h1>JSON Lint EXT</h1>
+  <div>
     <button id="button">Validate</button>
     <input type="checkbox" value="yes" id="reformat" /><label for="reformat">reformat JSON</label>
     
     <em> 
-    	<input type="checkbox" value="yes" id="strict-mode" />
+    	<input type="checkbox" value="yes" id="strict-mode" checked="checked"/>
     	<label for="strict-mode" title="will cause errors for duplicate properties">use <u>strict</u> parsing mode</label>
     </em>
     
@@ -92,10 +30,70 @@
     	<label for="extract-loc" title="attaches position data to parsed objects">extract <u>location information</u> as meta data</label>
     </em>
     
-  </p>
-  <h2>Results</h2>
-  <pre id="result"></pre>
-  <p><a href="https://github.com/russaa/jsonlint-ext">project on github</a>
-  	<i><small>(based on <a href="https://github.com/zaach/jsonlint">jsonlint@github</a>)</small></i></p> 
-</body> 
-</html> 
+    <fieldset id="result">
+    	<legend>Validation Results</legend>
+    	<div class="text">&nbsp;</div>
+    </fieldset>
+    
+  </div>
+  
+  <hr/>
+  
+<!-- editor element / placeholder -->
+<pre id="inputBox" class="editor">
+{
+ 
+ "duplicate_property": "first value!",
+ 
+ "duplicate_property": ["second",
+ "value", 
+ 3]}
+</pre>
+  
+<hr/>
+
+<!-- ################### SECTION: Popup dialogs & tooltip dialogs ################################# -->
+<div id="dialogs" style="display:none">			
+	
+	<div id="errorPopup" class="ui-content ui-corner-all">
+	    <div id="errorPopupTitle" class="hidden">
+	    	<div> <i></i> &nbsp;<span>a short title</span></div>
+	    </div>
+	    <div id="errorPopupContent" class="ui-content ui-corner-bottom ui-content">
+	        <h3 class="ui-title" id="errorPopupCaption">short description or question.</h3>
+	        <div id="errorPopupText">detailed description</div>
+	    </div>
+	</div>
+	
+	<div id="infoPopup"class="ui-content ui-corner-all">
+	    <div id="infoPopupTitle" class="hidden">
+	    	<div> <i></i> &nbsp;<span>a short title</span></div>
+	    </div>
+	    <div id="infoPopupContent" class="ui-content ui-corner-bottom ui-content">
+	        <div id="infoPopupText">information text</div>
+	    </div>
+	</div>
+	
+	<div id="popupAppHelpInfo" class="ui-content" data-title="Quick Reference">
+	  <div><!-- h3>Quick Reference</h3-->
+	    
+	    <h5>Editor Shortcuts</h5>
+	    <ul class="function-list">
+	    	<li><span class="key">CTRL</span> + <span class="key">#</span>: comment / un-comment line</li>
+			<li><span class="key">CTRL</span> + <span class="key">a</span>: select all</li>
+			<li><span class="key">CTRL</span> + <span class="key">d</span>: delete line</li>
+			<li><span class="key">CTRL</span> + <span class="key">f</span>: search / replace dialog</li>
+			<li><span class="key">CTRL</span> + <span class="key">l</span>: "go to line" dialog</li>
+			<li><span class="key">CTRL</span> + <span class="key">q</span>: jump to last edited position</li>
+			
+			<li><span class="key">CTRL</span> + <span class="key">y</span>: redo</li>
+			<li><span class="key">CTRL</span> + <span class="key">z</span>: undo</li>
+	    </ul>
+	  	<br/><br/>
+	  </div>
+	</div>
+	
+</div>
+    
+</body>
+</html>
