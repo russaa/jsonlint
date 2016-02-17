@@ -3,19 +3,22 @@ JSON Lint (EXTENDED)
 
 A modified version of the JavaScript [JSON parser](https://github.com/zaach/jsonlint/) by Z. Carter.
 
-Try a demo for the modified version [jsonlint-ext](https://russaa.github.io/jsonlint-ext/):
-the demo page offers a JSON verifier with extended options, e.g. `strict` mode (see details below).
+Try a **demo** for the modified JSON parser [jsonlint-ext](https://russaa.github.io/jsonlint-ext/):
+the demo page uses the _location information_ for marking JSON errors in an editor;
+in addition you can (manually) try the extended options of the JSON verifier, e.g. with/without
+`strict` mode (see details below).
 
 
 MODIFICATION (russa)
 ----
 
 Modified JSON parser with:
- * additional location information (i.e. position of objects within parsed string)
- * `strict` parsing mode which
+ * [additional location information](#mod-location-information) (i.e. position of objects within parsed string)
+ * [`strict` parsing mode](#mod-strict-parsing-mode) which
    * will throw an error if JSON object has duplicate keys
-   * _TODO: add features for strict parsing mode_ 
+   * _TODO: add features for strict parsing mode(?)_ 
 
+-----
 
 ### MOD: Location Information 
 
@@ -91,38 +94,9 @@ the result for example above would be:
 }
 ``` 
 
-##### loc for Properties
-Position information is stored in property `"_loc"`.
-Positions for properties are noted in the object's `"_loc"` in sub-property: `"_"+ property-name`
-e.g.:
-```javascript
-{
-  "_loc": {
-    "_someProperty": {
-            ...
-```
+##### The loc Object
 
-##### loc for Array Entries
-Positions for array entries are noted in the array's `"_loc"` in sub-property: ´"_"+ entry-index`
-e.g.:
-```javascript
-{
-  "_loc": {
-    "_0": {
-    "_1": {
-            ...
-```
-##### loc for Arrays and Objects
-The object's / array's own position is noted in `"_loc"` in sub-property `"_this"`
-e.g.:
-```javascript
-{
-  "_loc": {
-    "_this": { ...
-````
-
-##### The loc Properties
-Each position/location information object has properties:
+Each position/location information object consists of the following properties:
 ```javascript
 { 
   "first_line"   : NUMBER
@@ -131,6 +105,60 @@ Each position/location information object has properties:
   "last_column"  : NUMBER
 }
 ```
+
+##### loc for Properties
+
+Generally, the position information is stored in property `"_loc"`.
+
+Positions for **properties** are noted in the object's `"_loc"`-property
+within sub-property: `"_" + <property-name>`.
+
+For a property, the location information is an array with 2 location-entries: 
+the first entry _locates_ the property-name and the second one the property-value
+
+Note: if the value does not have a primitive type, then the value-entry will actually be not
+ a `loc` information object, but contain itself the value's location information via sub-properties;
+ in this case, the `loc` for the value-object itself will be contained in the special sub-property `"_this"`. 
+See the additional information below: `loc` for [Arrays and Objects](loc-for-arrays-and-objects) and
+`loc` for [Arrays Entries](loc-for-array-entries).
+
+
+For example, the result for `{"someProperty":...}` would look something like:
+```javascript
+{
+  "someProperty":
+  ...
+  "_loc": {
+    "_someProperty": [
+      {"first_line":...},  //location of the property-name for someProperty
+      {"first_line":...}   //location of a primitive property-value for someProperty
+    ]
+    ...
+```
+
+##### loc for Arrays and Objects
+
+The object's / array's own position is noted in `"_loc"` in sub-property `"_this"`
+e.g.:
+```javascript
+{
+  "_loc": {
+    "_this": { "first_line": ...
+````
+
+##### loc for Array Entries
+
+Positions for array entries are noted in the array's `"_loc"` in sub-property: `"_" + <entry-index>`
+e.g.:
+```javascript
+{
+  "_loc": {
+    "_0": { "first_line": ...
+    "_1": { "first_line": ... 
+            ...
+```
+
+-----
 
 ### MOD: Strict parsing mode
 
