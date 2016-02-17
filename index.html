@@ -17,6 +17,19 @@
 
   <h1>JSON Lint EXT</h1>
   <div>
+  	<p>
+  		Example for the <em>Extended JSON parser</em>: the editor uses the <em>location information</em>
+  		for marking JSON errors within the editor-view.
+  		<br/>
+  		Enabling <em>strict mode</em> will give an error, if the JSON contains duplicate properties.
+  		<br/>
+  		<em><small>
+  			NOTE: The editor demo is based on the <a href="http://esprima.org/demo/validate.html">Esprima Demo</a>
+  			      using the JavaScript editor component of <a href="https://wiki.eclipse.org/Orion">Orion</a>.
+  		</small></em>
+  	</p>
+  </div>
+  <div>
     <button id="button">Validate</button>
     <input type="checkbox" value="yes" id="reformat" /><label for="reformat">reformat JSON</label>
     
@@ -52,7 +65,7 @@
   
 <hr/>
 <p id="info"><a href="https://github.com/russaa/jsonlint-ext">project on github</a>
-  <i><small>(based on <a href="https://github.com/zaach/jsonlint">jsonlint@github</a>)</small></i>
+  <em><small>(based on <a href="https://github.com/zaach/jsonlint">jsonlint@github</a>)</small></em>
 </p> 
 
 <!-- ################### SECTION: Popup dialogs & tooltip dialogs ################################# -->
