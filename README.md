@@ -1,6 +1,16 @@
 JSON Lint (EXTENDED)
 =========
 
+<h1 style="color: red;">
+DEPRECATED this repository is archieved. The main development has moved to <a href="https://github.com/mmig/jsonlint-pos/">mmig/jsonlint-pos</a>
+</h1>
+
+```diff
+- DEPRECATED this repository is archieved will not be updated in the future 
+- the current development has moved to https://github.com/mmig/jsonlint-pos/
+```
+
+
 A modified version of the JavaScript [JSON parser](https://github.com/zaach/jsonlint/) by Z. Carter.
 
 Try a **demo** for the modified JSON parser [jsonlint-ext](https://russaa.github.io/jsonlint-ext/):
